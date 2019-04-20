@@ -1,4 +1,4 @@
-package com.brilliance.batch.work.config;
+package com.brilliance.batch.work.Jobconfig;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -14,8 +14,8 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import java.util.List;
 import java.util.Map;
 
-@Configuration
-@EnableBatchProcessing
+//@Configuration
+//@EnableBatchProcessing
 public class JobOneConfiguration {
 
     @Autowired
@@ -62,7 +62,7 @@ public class JobOneConfiguration {
 
     //step
     @Bean
-//    @JobScope
+//@StepScope
     public Step step1() {
         return stepBuilderFactory.get("step1")
                 .<Map<String, String>, String>chunk(100)

@@ -21,6 +21,7 @@
         <fastjson.version>1.2.31</fastjson.version>
         <guava.version>14.0.1</guava.version>
         <batch.version>2.2.6.RELEASE</batch.version>
+        <druid.version>1.1.0</druid.version>
 
     </properties>
 
@@ -171,6 +172,18 @@
             <version>2.2.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.1.0</version>
+        </dependency>
+
+        <!-- Druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
 
     </dependencies>
 
