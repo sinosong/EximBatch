@@ -1,14 +1,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:batch="http://www.springframework.org/schema/batch" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/batch
+	   xmlns:batch="http://www.springframework.org/schema/batch" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/batch
 		http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
 		http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-	">
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<import resource="classpath:application.xml" />
+	<import resource="classpath:config/db-config.xml" />
 
 	<bean id="report" class="com.brilliance.batch.model.Report" scope="prototype" />
+	<bean id="BizCanvas" class="com.brilliance.batch.model.BizCanvas" scope="prototype" />
 	<bean id="itemProcessor" class="com.brilliance.batch.CustomItemProcessor" />
 	<bean id="xmlItemWriter" class="org.springframework.batch.item.xml.StaxEventItemWriter">
 		<property name="resource" value="file:xml/outputs/report.xml" />
@@ -17,7 +18,7 @@
 	</bean>
 
 	<batch:job id="readTable">
-		<batch:step id="step1">
+		<batch:step id="step042001">
 			<batch:tasklet>
 				<batch:chunk reader="dbItemReader" writer="xmlItemWriter" processor="itemProcessor"
 					commit-interval="10">
@@ -34,36 +35,30 @@
 	</bean>-->
     <bean id="dbItemReader" class="org.mybatis.spring.batch.MyBatisPagingItemReader" scope="prototype">
         <property name="sqlSessionFactory" ref="sqlSessionFactory" />
-        <property name="pageSize" value="1000"/>
+        <!--<property name="pageSize" value="1000"/>-->
         <property name="queryId" value="com.brilliance.batch.mapper.db.mapper.getMaxWorkDate" />
+		<!--<property name="parameterValues">
+			<map>
+				<entry key="workdate" value="#{jobParameters['workdate']}"></entry>
+			</map>
+		</property>-->
     </bean>
 
-    <!-- Mybatis ItemWriter 其中statementId：对应Mapper xml文件中的id，此处为空，因要在代码中动态填充 -->
-    <!--<bean id="itemWriter" class="org.mybatis.spring.batch.MyBatisBatchItemWriter" scope="prototype">
-        <property name="sqlSessionFactory" ref="resellSqlSessionFactory"/>
-        <property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>
-        <property name="statementId" value=""/>
-    </bean>-->
 
+	<!--<bean id="dateBasedCriteriaReader"
+		  class="org.mybatis.spring.batch.MyBatisPagingItemReader"
+		  p:sqlSessionFactory-ref="batchReadingSessionFactory"
+		  p:parameterValues-ref="datesParameters"
+		  p:queryId="com.brilliance.batch.mapper.db.mapper.queryUserInteractionsOnSpecificTimeSlot"
+		  p:pageSize="200"
+		  scope="step"/>
 
-	<!--<bean id="ItemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
-
-		<property name="resource" value="classpath:report.csv" />
-
-		<property name="lineMapper">
-			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
-				<property name="lineTokenizer">
-					<bean
-						class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
-						<property name="names" value="id,sales,qty,staffName,date" />
-					</bean>
-				</property>
-				<property name="fieldSetMapper">
-				    <bean class="com.brilliance.batch.mapper.DBJobReportFieldSetMapper" />
-				</property>
-			</bean>
-		</property>
-	</bean>-->
+	<util:map id="datesParameters" scope="step">
+		<entry key="yesterday" value="#{jobExecutionContext['EXTRACTION_START_DATE']}"/>
+		<entry key="today" value="#{jobExecutionContext['TODAY_DATE']}"/>
+		<entry key="first_day_of_the_month" value="#{jobExecutionContext['FIRST_DAY_OF_THE_MONTH_DATE']}"/>
+		<entry key="first_day_of_the_previous_month" value="#{jobExecutionContext['FIRST_DAY_OF_THE_PREVIOUS_MONTH_DATE']}"/>
+	</util:map>-->
 
 
 	<bean id="reportMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">

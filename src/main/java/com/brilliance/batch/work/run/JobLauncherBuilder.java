@@ -3,6 +3,7 @@ package com.brilliance.batch.work.run;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.context.ApplicationContext;
@@ -37,7 +38,8 @@ public class JobLauncherBuilder extends SimpleJobLauncher {
 
         try {
 
-            JobExecution execution = jobLauncher.run(job, new JobParameters());
+            JobExecution execution = jobLauncher.run(job,new JobParameters());
+//            JobExecution execution = jobLauncher.run(job,new JobParametersBuilder().addString("workdate", "2019-12-12 00:00:00").toJobParameters());
             System.out.println("Exit Status : " + execution.getStatus());
 
         } catch (Exception e) {
