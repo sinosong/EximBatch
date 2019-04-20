@@ -1,4 +1,4 @@
-package com.brilliance.batch.sample.config;
+package com.brilliance.batch.work.config;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

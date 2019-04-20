@@ -1,4 +1,4 @@
-package com.brilliance.batch.sample.config;
+package com.brilliance.batch.work.config;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;

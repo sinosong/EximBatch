@@ -1,4 +1,4 @@
-package com.brilliance.batch.sample.run;
+package com.brilliance.batch.work.run;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -7,7 +7,7 @@ import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 
 public class JobLauncherBuilder extends SimpleJobLauncher {
 
-    private Job job;
+    /*private Job job;
     private JobLauncher jobLauncher;
 
     public void launch() throws Exception {
@@ -17,9 +17,9 @@ public class JobLauncherBuilder extends SimpleJobLauncher {
 
     private JobParameters createJobParameters() {
 
-//读配置文件调度...
 
-    }
+
+    }*/
 
 
 

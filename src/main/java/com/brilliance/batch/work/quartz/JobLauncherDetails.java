@@ -1,4 +1,4 @@
-package com.brilliance.batch.sample.quartz;
+package com.brilliance.batch.work.quartz;
 
 import java.util.Date;
 import java.util.Map;
