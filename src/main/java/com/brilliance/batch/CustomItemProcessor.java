@@ -1,12 +1,12 @@
 package com.brilliance.batch;
 
-import com.brilliance.batch.model.Report;
+import com.brilliance.batch.model.BizCanvas;
 import org.springframework.batch.item.ItemProcessor;
 
-public class CustomItemProcessor implements ItemProcessor<Report, Report> {
+public class CustomItemProcessor implements ItemProcessor<BizCanvas, BizCanvas> {
 
 	@Override
-	public Report process(Report item) throws Exception {
+	public BizCanvas process(BizCanvas item) throws Exception {
 		
 		System.out.println("Processing..." + item);
 		return item;

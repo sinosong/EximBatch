@@ -16,17 +16,37 @@
 		<property name="rootTagName" value="report" />
 	</bean>
 
-	<batch:job id="helloWorldJob">
+	<batch:job id="readTable">
 		<batch:step id="step1">
 			<batch:tasklet>
-				<batch:chunk reader="cvsFileItemReader" writer="xmlItemWriter" processor="itemProcessor"
+				<batch:chunk reader="dbItemReader" writer="xmlItemWriter" processor="itemProcessor"
 					commit-interval="10">
 				</batch:chunk>
 			</batch:tasklet>
 		</batch:step>
 	</batch:job>
 
-	<bean id="cvsFileItemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
+	<!-- Mybatis ItemReader 其中queryId：对应Mapper xml文件中的id，此处为空，因要在代码中动态填充 -->
+	<!--<bean id="dbItemReader" class="org.mybatis.spring.batch.MyBatisPagingItemReader" scope="prototype">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="pageSize" value="1000"/>
+		<property name="queryId" value="" />
+	</bean>-->
+    <bean id="dbItemReader" class="org.mybatis.spring.batch.MyBatisPagingItemReader" scope="prototype">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+        <property name="pageSize" value="1000"/>
+        <property name="queryId" value="com.brilliance.batch.mapper.db.mapper.getMaxWorkDate" />
+    </bean>
+
+    <!-- Mybatis ItemWriter 其中statementId：对应Mapper xml文件中的id，此处为空，因要在代码中动态填充 -->
+    <!--<bean id="itemWriter" class="org.mybatis.spring.batch.MyBatisBatchItemWriter" scope="prototype">
+        <property name="sqlSessionFactory" ref="resellSqlSessionFactory"/>
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>
+        <property name="statementId" value=""/>
+    </bean>-->
+
+
+	<!--<bean id="ItemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
 
 		<property name="resource" value="classpath:report.csv" />
 
@@ -39,24 +59,17 @@
 					</bean>
 				</property>
 				<property name="fieldSetMapper">
-				    <bean class="com.brilliance.batch.mapper.ReportFieldSetMapper" />
-				    
+				    <bean class="com.brilliance.batch.mapper.DBJobReportFieldSetMapper" />
 				</property>
 			</bean>
 		</property>
-
-	</bean>
-
-	<!--<bean id="xmlItemWriter" class="org.springframework.batch.item.xml.StaxEventItemWriter">
-		<property name="resource" value="file:xml/outputs/report.xml" />
-		<property name="marshaller" ref="reportMarshaller" />
-		<property name="rootTagName" value="report" />
 	</bean>-->
+
 
 	<bean id="reportMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
 		<property name="classesToBeBound">
 			<list>
-				<value>com.brilliance.batch.model.Report</value>
+				<value>com.brilliance.batch.model.BizCanvas</value>
 			</list>
 		</property>
 	</bean>

@@ -26,13 +26,14 @@ public class JobLauncherBuilder extends SimpleJobLauncher {
 
         String[] springConfig =
                 {
-                        "batch/jobs/job-hello-world.xml"
+//                        "batch/jobs/job-hello-world.xml"
+                        "batch/jobs/job-read-table.xml"
                 };
 
         ApplicationContext context = new ClassPathXmlApplicationContext(springConfig);
 
         JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
-        Job job = (Job) context.getBean("helloWorldJob");
+        Job job = (Job) context.getBean("readTable");
 
         try {
 
