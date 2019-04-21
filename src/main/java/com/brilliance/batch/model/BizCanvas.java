@@ -2,8 +2,10 @@ package com.brilliance.batch.model;
 
 import com.google.common.base.Objects;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-
+@XmlRootElement(name = "BizCanvas")
 public class BizCanvas implements Serializable {
 
     //查询编号
