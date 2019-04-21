@@ -8,25 +8,27 @@
 
 	<import resource="classpath:config/db-config.xml" />
 
-	<!--<bean id="report" class="com.brilliance.batch.model.Report" scope="prototype" />-->
-	<bean id="BizCanvas" class="com.brilliance.batch.model.BizCanvas" scope="prototype" />
-	<bean id="itemProcessor" class="com.brilliance.batch.CustomItemProcessor" />
 
-	<bean id="xmlItemWriter" class="org.springframework.batch.item.xml.StaxEventItemWriter">
-		<property name="resource" value="file:xml/outputs/report.xml" />
+	<!--<bean id="report" class="com.brilliance.batch.model.Report" scope="prototype" />-->
+	<!--<bean id="BizCanvas" class="com.brilliance.batch.model.BizCanvas" scope="prototype" />-->
+	<!--<bean id="XmlitemProcessor" class="com.brilliance.batch.XmlitemProcessor" />-->
+
+	<bean id="xmlItemWriter" class="org.springframework.batch.item.xml.StaxEventItemWriter" scope="step">
+		<property name="resource" value="file:#{jobParameters['outputFilePath']}" />
+		<!--<property name="resource" value="classpath:data/output/file-*.txt" />-->
 		<property name="marshaller" ref="reportMarshaller" />
-		<property name="rootTagName" value="BizCanvas" />
+		<property name="rootTagName" value="MSG" />
+		<property name="overwriteOutput" value="true" />
 	</bean>
 
-    <bean id="dbItemReader" class="org.mybatis.spring.batch.MyBatisPagingItemReader" scope="prototype">
+    <bean id="dbItemReader" class="org.mybatis.spring.batch.MyBatisPagingItemReader" scope="step">
         <property name="sqlSessionFactory" ref="sqlSessionFactory" />
-        <!--<property name="pageSize" value="1000"/>-->
         <property name="queryId" value="com.brilliance.batch.mapper.db.BizCanvasMapper.getMaxWorkDate" />
-		<!--<property name="parameterValues">
+		<property name="parameterValues">
 			<map>
 				<entry key="workdate" value="#{jobParameters['workdate']}"></entry>
 			</map>
-		</property>-->
+		</property>
     </bean>
 
 
@@ -47,6 +49,20 @@
 
 
 	<bean id="reportMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="marshallerProperties">
+			<map>
+				<!-- format : 默认 Boolean.false(Compact format)  -->
+				<entry key="jaxb.formatted.output">
+					<value type="java.lang.Boolean">true</value>
+				</entry>
+				<!-- xml Declaration :默认 Boolean.false -->
+				<entry key="jaxb.fragment">
+					<value type="java.lang.Boolean">false</value>
+				</entry>
+				<!-- xml encoding declaration: 默认 UTF-8 -->
+				<entry key="jaxb.encoding" value="GBK"/>
+			</map>
+		</property>
 		<property name="classesToBeBound">
 			<list>
 				<value>com.brilliance.batch.model.BizCanvas</value>
@@ -56,9 +72,9 @@
 
 
 	<batch:job id="readTable">
-		<batch:step id="step042001">
+		<batch:step id="step">
 			<batch:tasklet>
-				<batch:chunk reader="dbItemReader" writer="xmlItemWriter" processor="itemProcessor"
+				<batch:chunk reader="dbItemReader" writer="xmlItemWriter" processor="XmlitemProcessor"
 							 commit-interval="10">
 				</batch:chunk>
 			</batch:tasklet>

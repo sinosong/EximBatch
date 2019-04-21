@@ -2,8 +2,10 @@ package com.brilliance.batch;
 
 import com.brilliance.batch.model.BizCanvas;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
 
-public class CustomItemProcessor implements ItemProcessor<String, BizCanvas> {
+@Component("XmlitemProcessor")
+public class XmlitemProcessor implements ItemProcessor<String, BizCanvas> {
 
 	@Override
 	public BizCanvas process(String item) throws Exception {

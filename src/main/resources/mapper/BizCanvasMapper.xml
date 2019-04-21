@@ -6,11 +6,12 @@
 
     <select id="getMaxWorkDate" resultType="java.lang.String">
         SELECT
-        to_char(MAX (mem.workdate),'yyyy-mm-dd hh24:mi:ss') workdate
-        FROM INF_AFPCMEM mem
+        *
+        FROM BIZ_CANVAS canvas
+
         <where>
-            <if test="endDate != null and endDate != ''">
-                AND (mem.workdate &lt;= TO_DATE(#{endDate},'yyyy-mm-dd hh24:mi:ss'))
+            <if test="workdate != null and workdate != ''">
+                AND (canvas.create_time &lt;= TO_DATE(#{workdate},'yyyy-mm-dd hh24:mi:ss'))
             </if>
         </where>
     </select>

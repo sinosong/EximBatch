@@ -1,5 +1,7 @@
 package com.brilliance.batch.work.run;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -8,6 +10,8 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.Date;
 
 public class JobLauncherBuilder extends SimpleJobLauncher {
 
@@ -38,8 +42,13 @@ public class JobLauncherBuilder extends SimpleJobLauncher {
 
         try {
 
-            JobExecution execution = jobLauncher.run(job,new JobParameters());
-//            JobExecution execution = jobLauncher.run(job,new JobParametersBuilder().addString("workdate", "2019-12-12 00:00:00").toJobParameters());
+//            JobExecution execution = jobLauncher.run(job,new JobParameters());
+            Date date = new Date();
+            JobExecution execution = jobLauncher.run(job,new JobParametersBuilder()
+                    .addDate("date", date)
+                    .addString("workdate", "2029-04-12 00:00:00")
+                    .addString("outputFilePath", "F:/Temp/test/"+ DateFormatUtils.format(date,"yyyyMMDDHHmmss")+".xml")
+                    .toJobParameters());
             System.out.println("Exit Status : " + execution.getStatus());
 
         } catch (Exception e) {

@@ -3,6 +3,6 @@ package com.brilliance.batch.mapper.db;
 
 public interface BizCanvasMapper{
 
-    String getMaxWorkDate();
+    String getMaxWorkDate(String workdate);
 
 }

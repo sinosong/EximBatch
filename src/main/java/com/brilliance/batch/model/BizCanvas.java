@@ -1,11 +1,12 @@
 package com.brilliance.batch.model;
 
 import com.google.common.base.Objects;
-
-import javax.xml.bind.annotation.XmlAttribute;
+import org.springframework.stereotype.Component;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+
 @XmlRootElement(name = "BizCanvas")
+@Component
 public class BizCanvas implements Serializable {
 
     //查询编号
