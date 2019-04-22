@@ -38,6 +38,8 @@
 						<property name="names" value="id,sales,qty,staffName,date" />
 					</bean>
 				</property>
+
+
 				<property name="fieldSetMapper">
 				    <bean class="com.brilliance.batch.mapper.ReportFieldSetMapper" />
 				    

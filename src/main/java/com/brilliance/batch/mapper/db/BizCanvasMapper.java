@@ -1,8 +1,12 @@
 package com.brilliance.batch.mapper.db;
 
 
+import com.brilliance.batch.model.BizCanvas;
+
+import java.util.List;
+
 public interface BizCanvasMapper{
 
-    String getMaxWorkDate(String workdate);
+    List<BizCanvas> getMaxWorkDate(String workdate, String bizcode);
 
 }

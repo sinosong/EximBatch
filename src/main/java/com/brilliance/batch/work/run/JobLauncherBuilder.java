@@ -15,17 +15,6 @@ import java.util.Date;
 
 public class JobLauncherBuilder extends SimpleJobLauncher {
 
-    /*private Job job;
-    private JobLauncher jobLauncher;
-
-    public void launch() throws Exception {
-        JobParameters jobParams = createJobParameters();
-        jobLauncher.run(job, jobParams);
-    }
-
-    private JobParameters createJobParameters() {
-
-    }*/
 
     public static void main(String[] args) {
 
@@ -42,12 +31,12 @@ public class JobLauncherBuilder extends SimpleJobLauncher {
 
         try {
 
-//            JobExecution execution = jobLauncher.run(job,new JobParameters());
             Date date = new Date();
             JobExecution execution = jobLauncher.run(job,new JobParametersBuilder()
                     .addDate("date", date)
                     .addString("workdate", "2029-04-12 00:00:00")
-                    .addString("outputFilePath", "F:/Temp/test/"+ DateFormatUtils.format(date,"yyyyMMDDHHmmss")+".xml")
+                    .addString("bizcode","CRP2019040033001")
+                    .addString("outputFilePath", "G:/temp/test/"+ DateFormatUtils.format(date,"yyyyMMDDHHmmss")+".xml")
                     .toJobParameters());
             System.out.println("Exit Status : " + execution.getStatus());
 

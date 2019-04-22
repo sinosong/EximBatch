@@ -4,14 +4,30 @@
 
 <mapper namespace="com.brilliance.batch.mapper.db.BizCanvasMapper">
 
-    <select id="getMaxWorkDate" resultType="java.lang.String">
+    <select id="getMaxWorkDate" resultType="com.brilliance.batch.model.BizCanvas">
         SELECT
-        *
+        canvas.id_,
+        canvas.biz_code bizCode,
+        canvas.type_ type,
+        canvas.extra_ extra,
+        canvas.num_ num,
+        canvas.filename_ filename,
+        canvas.create_by,
+        canvas.create_time,
+        canvas.update_by,
+        canvas.update_time,
+        canvas.remark_,
+        canvas.enable_,
+        canvas.vernum_ vernum
+
         FROM BIZ_CANVAS canvas
 
         <where>
             <if test="workdate != null and workdate != ''">
                 AND (canvas.create_time &lt;= TO_DATE(#{workdate},'yyyy-mm-dd hh24:mi:ss'))
+            </if>
+            <if test="bizcode != null and bizcode != ''">
+                AND (canvas.biz_code = #{bizcode})
             </if>
         </where>
     </select>
