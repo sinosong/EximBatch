@@ -8,15 +8,11 @@ import org.springframework.stereotype.Component;
 public class XmlitemProcessor implements ItemProcessor<BizCanvas, BizCanvas> {
 
 	@Override
-	public BizCanvas process(BizCanvas item) throws Exception {
-		System.out.println(item.toString());
-        System.out.println("----------------------------------------");
-//		BizCanvas canvas = new BizCanvas();
-//        canvas.setFilename();
-//        canvas.setExtra(System.currentTimeMillis()+"");
-//
-//		System.out.println("Processing..." + canvas.toString());
-		return item;
+	public BizCanvas process(BizCanvas canvas) throws Exception {
+
+//        System.out.println("Processing..." + canvas.toString());
+
+		return canvas;
 	}
 
 }

@@ -17,7 +17,7 @@ public class DBJobReportFieldSetMapper implements FieldSetMapper<BizCanvas> {
 		System.out.println(fieldSet.getValues());
 
 		BizCanvas canvas = new BizCanvas();
-		canvas.setBizCode("11");
+//		canvas.setBizCode("11");
         canvas.setFilename(fieldSet.readString(0));
 		return canvas;
 		

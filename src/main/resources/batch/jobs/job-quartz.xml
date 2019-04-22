@@ -9,9 +9,6 @@
 	<import resource="classpath:config/db-config.xml" />
 
 
-	<!--<bean id="report" class="com.brilliance.batch.model.Report" scope="prototype" />-->
-	<!--<bean id="BizCanvas" class="com.brilliance.batch.model.BizCanvas" scope="prototype" />-->
-	<!--<bean id="XmlitemProcessor" class="com.brilliance.batch.job.processer.XmlitemProcessor" />-->
 
 	<bean id="xmlItemWriter" class="org.springframework.batch.item.xml.StaxEventItemWriter" scope="step">
 		<property name="resource" value="file:#{jobParameters['outputFilePath']}" />
@@ -30,22 +27,6 @@
 			</map>
 		</property>
     </bean>
-
-
-	<!--<bean id="dateBasedCriteriaReader"
-		  class="org.mybatis.spring.batch.MyBatisPagingItemReader"
-		  p:sqlSessionFactory-ref="batchReadingSessionFactory"
-		  p:parameterValues-ref="datesParameters"
-		  p:queryId="com.brilliance.batch.mapper.db.mapper.queryUserInteractionsOnSpecificTimeSlot"
-		  p:pageSize="200"
-		  scope="step"/>
-
-	<util:map id="datesParameters" scope="step">
-		<entry key="yesterday" value="#{jobExecutionContext['EXTRACTION_START_DATE']}"/>
-		<entry key="today" value="#{jobExecutionContext['TODAY_DATE']}"/>
-		<entry key="first_day_of_the_month" value="#{jobExecutionContext['FIRST_DAY_OF_THE_MONTH_DATE']}"/>
-		<entry key="first_day_of_the_previous_month" value="#{jobExecutionContext['FIRST_DAY_OF_THE_PREVIOUS_MONTH_DATE']}"/>
-	</util:map>-->
 
 
 	<bean id="reportMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
@@ -73,11 +54,58 @@
 
 	<batch:job id="readTable">
 		<batch:step id="step">
-			<batch:tasklet>
+			<batch:tasklet task-executor="taskExecutor" throttle-limit="50"  start-limit="3">
 				<batch:chunk reader="dbItemReader" writer="xmlItemWriter" processor="XmlitemProcessor" commit-interval="10">
 				</batch:chunk>
 			</batch:tasklet>
 		</batch:step>
 	</batch:job>
+
+    <bean id="taskExecutor"
+          class="org.springframework.core.task.SimpleAsyncTaskExecutor">
+    </bean>
+
+
+
+
+
+    <!-- 定时任务 开始 -->
+    <bean id="ledgerJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <!-- 定时执行的类 -->
+            <ref bean="quartzLedgerJob" />
+        </property>
+        <property name="targetMethod">
+            <!-- 定时执行的类方法 -->
+            <value>execute</value>
+        </property>
+    </bean>
+
+    <bean id="ledgerCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean" >
+        <!-- 这里不可以直接在属性jobDetail中引用taskJob，因为他要求的是一个jobDetail类型的对象，所以我们得通过MethodInvokingJobDetailFactoryBean来转一下 -->
+        <property name="jobDetail" >
+            <ref bean="ledgerJobDetail" />
+        </property>
+        <!--在每天下午18点到下午18:59期间的每1分钟触发  -->
+        <!--在每天上午10点40分准时触发  -->
+        <property name="cronExpression" >
+            <!-- <value>0 * 15 * * ?</value> -->
+            <!--<value>0 45 10 * * ? * </value>-->
+            <value>0/5 * * * * ? * </value>
+        </property>
+
+    </bean>
+
+    <!-- 触发器工厂，将所有的定时任务都注入工厂-->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <!-- 添加触发器 -->
+        <property name="triggers">
+            <list>
+                <!-- 将上面定义的测试定时任务注入（可以定义多个定时任务，同时注入）-->
+                <ref local="ledgerCronTrigger" />
+            </list>
+        </property>
+    </bean>
+
 
 </beans>

@@ -8,5 +8,7 @@
     <!-- 包自动注入 -->
     <context:component-scan base-package="com.brilliance.batch"/>
 
+    <bean id="springContextHolder" class="com.brilliance.batch.util.SpringContextHolder" lazy-init="false"/>
+
 
 </beans>
