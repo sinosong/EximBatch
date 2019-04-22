@@ -2,20 +2,25 @@ package com.brilliance.batch.model;
 
 import com.google.common.base.Objects;
 import org.springframework.stereotype.Component;
-import javax.xml.bind.annotation.XmlRootElement;
+
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
-@XmlRootElement(name = "BizCanvas")
 @Component
+@XmlRootElement(name = "BizCanvas")
+//@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = { "bizCode", "verNum", "num" ,"type","extra","filename"})
 public class BizCanvas implements Serializable {
 
     //查询编号
+//    @XmlElement(name = "BIZCODE")
     private String bizCode;
 
     //债项事前录入A、债项补录B、审批过程录入S、发放审核F三种
     private String type;
 
     //存事中的taskid，补录给1好了，发放审核编号
+//    @XmlElement(name = "其它")
     private String extra;
 
     //页码,可用于排序
@@ -89,3 +94,5 @@ public class BizCanvas implements Serializable {
                 .toString();
     }
 }
+
+
